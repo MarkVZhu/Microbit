@@ -11,7 +11,7 @@ public class TestInput : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		InputMgr.Instance.StartOrEndCheck(true);
+		//InputMgr.Instance.StartOrEndCheck(true);
 		
 		EventCenter.Instance.AddEventListener<string>(E_EventType.E_Micro_Input, CheckInput);
 	}

@@ -19,20 +19,20 @@ namespace MarkFramework
 		
 		private void MyUpdate()
 		{
-			if(!isStart)
+			if(!GameStateManager.Instance.isPlaying)
 				return;
-			CheckKeyCode(KeyCode.W);
-			CheckKeyCode(KeyCode.A);
-			CheckKeyCode(KeyCode.S);
+			CheckKeyCode(KeyCode.Space);
 			CheckKeyCode(KeyCode.D);
 		}
 		
 		private void CheckKeyCode(KeyCode key)
 		{
-			if(Input.GetKeyDown(key))
-				EventCenter.Instance.EventTrigger(E_EventType.E_Micro_Input, key);
-			if(Input.GetKeyUp(key))
-				EventCenter.Instance.EventTrigger(E_EventType.E_Key_Up, key);
+			if(Input.GetKeyDown(key) && key == KeyCode.D)
+				EventCenter.Instance.EventTrigger(E_EventType.E_Micro_Input, "S");
+			if(Input.GetKeyDown(key) && key == KeyCode.Space)
+				EventCenter.Instance.EventTrigger(E_EventType.E_Micro_Input, "V5");
+			// if(Input.GetKeyUp(key))
+			// 	EventCenter.Instance.EventTrigger(E_EventType.E_Key_Up, key);
 		}
 	}
 }
