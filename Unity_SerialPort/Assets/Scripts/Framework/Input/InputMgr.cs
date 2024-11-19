@@ -17,6 +17,11 @@ namespace MarkFramework
 			isStart = isOpen;
 		}
 		
+		public void InitiateInputMgr()
+		{
+			//Initiate Input Manager in case no other functions are invoked 
+		}
+		
 		private void MyUpdate()
 		{
 			if(!GameStateManager.Instance.isPlaying)

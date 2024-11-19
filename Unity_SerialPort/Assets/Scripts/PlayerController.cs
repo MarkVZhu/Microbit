@@ -1,3 +1,4 @@
+using MarkFramework;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,16 +9,16 @@ public class PlayerController : MonoBehaviour
 	public LayerMask groundLayer;
 	public float groundCheckRadius = 0.1f;  // Radius of the ground check circle
 
-	private Rigidbody2D rb;
+	[SerializeField]private Rigidbody2D rb;
 	private bool isGrounded;
 	private float moveInput;
 	[SerializeField] private Transform groundCheckPosition;  // Position of the ground check circle
 	private Animator anim;
 
-	void Awake()
+	void OnEnable()
 	{
-		rb = GetComponent<Rigidbody2D>();
-		anim = GetComponent<Animator>();
+		rb = gameObject.GetComponent<Rigidbody2D>();
+		anim = gameObject.GetComponent<Animator>();
 	}
 
 	void Update()
@@ -70,11 +71,26 @@ public class PlayerController : MonoBehaviour
 		// 	anim.SetTrigger("jump");
 		// 	Jump();
 		// }
+		
+		if(GameStateManager.Instance.currentState == GameStateManager.GameState.Fail)
+		{
+			rb.bodyType = RigidbodyType2D.Static;
+			anim.SetTrigger("Hurt");
+			GameStateManager.Instance.EnterState(GameStateManager.GameState.End);
+		}
+		
+		if(GameStateManager.Instance.currentState == GameStateManager.GameState.Success)
+		{
+			rb.bodyType = RigidbodyType2D.Static;
+			anim.SetTrigger("Success");
+			GameStateManager.Instance.EnterState(GameStateManager.GameState.End);
+		}
 	}
 	
 	public void MoveForward()
 	{
-		if(rb.velocity.x < 5f) rb.AddForce(Vector2.right * moveSpeed, ForceMode2D.Force);
+		if (rb.velocity.x < 2f) rb.AddForce(Vector2.right * moveSpeed * 1.2f, ForceMode2D.Force);
+		else if (rb.velocity.x < 5.5f) rb.AddForce(Vector2.right * moveSpeed, ForceMode2D.Force);
 		Debug.Log(rb.velocity.x);
 	}
 	
@@ -82,6 +98,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if(isGrounded)
 		{
+			SoundMgr.Instance.PlaySound("Jump");
 			anim.SetTrigger("jump");
 			float jumpMul = 1f + voiceInt/10f;
 			rb.AddForce(Vector2.up * jumpForce * jumpMul, ForceMode2D.Impulse);
@@ -99,5 +116,10 @@ public class PlayerController : MonoBehaviour
 			// Draw a circle at the ground check position
 			Gizmos.DrawWireCube(groundCheckPosition.position, new Vector2(0.6f,0.1f));
 		}
+	}
+	
+	private void OnDestroy() 
+	{
+		StopAllCoroutines();
 	}
 }

@@ -12,7 +12,8 @@ public class TestInput : MonoBehaviour
 	void Start()
 	{
 		//InputMgr.Instance.StartOrEndCheck(true);
-		
+		InputMgr.Instance.InitiateInputMgr();
+		pc = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 		EventCenter.Instance.AddEventListener<string>(E_EventType.E_Micro_Input, CheckInput);
 	}
 
@@ -21,12 +22,17 @@ public class TestInput : MonoBehaviour
 		if(code.Contains("S"))
 		{
 			pc.MoveForward();
-			Debug.Log("前进");
+			Debug.Log("Forward");
 		}
 		if(code.Contains("V"))
 		{
 			pc.Jump(int.Parse(code[code.Length - 1].ToString()));
-			Debug.Log("跳跃" + code[code.Length - 1]);
+			Debug.Log("Jump" + code[code.Length - 1]);
 		}
+	}
+	
+	private void OnDestroy() 
+	{
+		EventCenter.Instance.RemoveEventListener<string>(E_EventType.E_Micro_Input, CheckInput);
 	}
 }

@@ -52,11 +52,15 @@ public class ResultPanel : BasePanel {
 		{
 			case "btnResume":
 				Debug.Log("btnResume被点击");
-				break;
-			case "btnMain":
-				Debug.Log("btnMain被点击");
+				GameStateManager.Instance.saveData.lastSavePosition = GameStateManager.Instance.saveData.defaultPosition;
+				GameStateManager.Instance.RestartGame();
 				UIManager.Instance.HidePanel("ResultPanel");
-				UIManager.Instance.ShowPanel<MainPanel>("MainPanel");
+				break;
+			case "btnRestart":
+				Debug.Log("btnRestart被点击");
+				SoundMgr.Instance.StopAllSound();
+				GameStateManager.Instance.RestartGame();
+				UIManager.Instance.HidePanel("ResultPanel");
 				break;
 		}
 	}

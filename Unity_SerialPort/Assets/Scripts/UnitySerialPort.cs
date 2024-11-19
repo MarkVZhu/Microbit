@@ -349,15 +349,16 @@ public class UnitySerialPort : MonoBehaviour
 
 		// Process all messages from the queue on the main thread
 		while (serialQueue.TryDequeue(out string rData))
-        {
-            // Now it's safe to use Unity API functions
-            Debug.Log("Received data: " + rData);
-            EventCenter.Instance.EventTrigger<string>(E_EventType.E_Micro_Input, rData);
+		{
+			// Now it's safe to use Unity API functions
+			Debug.Log("Received data: " + rData);
+			if(GameStateManager.Instance.isPlaying)
+				EventCenter.Instance.EventTrigger<string>(E_EventType.E_Micro_Input, rData);
 
-            // Process chunked data if necessary
-            string[] chunkData = rData.Split(Separator);
-            ParseSerialData(chunkData, rData);
-        }
+			// Process chunked data if necessary
+			string[] chunkData = rData.Split(Separator);
+			ParseSerialData(chunkData, rData);
+		}
 		
 		try
 		{
@@ -755,10 +756,10 @@ public class UnitySerialPort : MonoBehaviour
 				// }
 				
 				// If data is valid, enqueue it for main thread processing
-                if (!string.IsNullOrEmpty(rData))
-                {
-                    serialQueue.Enqueue(rData);
-                }
+				if (!string.IsNullOrEmpty(rData))
+				{
+					serialQueue.Enqueue(rData);
+				}
 			}
 		}
 		catch (TimeoutException)

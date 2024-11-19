@@ -57,10 +57,12 @@ public class MainPanel : BasePanel {
 			case "btnStart":
 				Debug.Log("btnStart被点击");
 				UIManager.Instance.HidePanel("MainPanel");
-				UIManager.Instance.ShowPanel<ResultPanel>("ResultPanel");
+				//UIManager.Instance.ShowPanel<ResultPanel>("ResultPanel");
+				GameStateManager.Instance.EnterState(GameStateManager.GameState.Playing);
 				break;
 			case "btnQuit":
 				Debug.Log("btnQuit被点击");
+				Application.Quit();
 				break;
 		}
 	}
